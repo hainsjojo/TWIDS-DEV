@@ -38,7 +38,8 @@ with open(log_file) as f:
         # in format that sqlite3 date functions can work with
         #d['date'] = d['time_received_datetimeobj'].date().isoformat()
         
-        match = re.search("GET /(.*) HTTP/1.1", entry.request_line)
+        #match = re.search("GET /(.*) HTTP/1.1", entry.request_line)
+        match = re.search("GET \/(................................).*HTTP\/1.1", entry.request_line)
         tw_id_temp = match.group(1)
         print(tw_id_temp)
         cur.execute("""
