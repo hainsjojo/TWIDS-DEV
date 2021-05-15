@@ -8,17 +8,17 @@ import sqlite3
 conn = sqlite3.connect('admin.db')
 c = conn.cursor()
 
-c.execute('select * from Person where tw_id in (select tw_id from logs)')
-table1 = c.execute('select * from Person where tw_id in (select tw_id from logs)')
+c.execute('select * from Tripwires where tw_id in (select tw_id from logs)')
+table1 = c.execute('select * from Tripwires where tw_id in (select tw_id from logs)')
 
 b = conn.cursor()
 
-table2 = b.execute('select * from logs where tw_id in (select tw_id from Person)')
+table2 = b.execute('select * from logs where tw_id in (select tw_id from Tripwires)')
 
 cur = conn.cursor()
 
 check = conn.cursor()
-ifexist = check.execute('select tw_id from triggered where tw_id in (select tw_id from Person)')
+ifexist = check.execute('select tw_id from triggered where tw_id in (select tw_id from Tripwires)')
 
 output = check.fetchall()
 
@@ -33,6 +33,9 @@ if canary == False:
             name = i[1]        
             email = i[2]
             tw_id = i[3]
+            desc = i[4]
+            priority = i[5]
+            payload = i[6]
             remote_host = j[1]
             request_time = j[2]
             print(name)
@@ -41,7 +44,7 @@ if canary == False:
             print(remote_host)
             print(request_time)
             try:
-                cur.execute('INSERT INTO triggered (name, email, tw_id, remote_host, request_time) VALUES (?, ?, ?, ?, ?)', (name, email, tw_id, remote_host, request_time))
+                cur.execute('INSERT INTO triggered (name, email, tw_id, desc, priority, payload, remote_host, request_time) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', (name, email, tw_id, desc, priority, payload, remote_host, request_time))
                 conn.commit()
             except:
                 pass
